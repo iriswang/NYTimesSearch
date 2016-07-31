@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 
+import com.iris.nytimessearch.listeners.EndlessScrollListener;
 import com.iris.nytimessearch.models.Article;
 import com.iris.nytimessearch.adapters.ArticleArrayAdapter;
 import com.iris.nytimessearch.R;
@@ -27,6 +28,8 @@ import org.parceler.Parcels;
 
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -42,6 +45,25 @@ public class SearchActivity extends AppCompatActivity {
     private final String API_KEY = "51ba1c50281b474d82ab5c30973ddb60";
     private final String URL = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
 
+    // Constants for sort order
+    private static final String QUERY_PARAM_SORT = "sort";
+    public static final String SORT_ORDER_OLDEST = "oldest";
+    public static final String SORT_ORDER_NEWEST = "newest";
+
+    // Query Params
+    private static final String QUERY_PARAM_BEGIN_DATE = "begin_date";
+
+    //Query Params
+    private static final String NEWS_DESK_ARG = "fq";
+    private static final String NEWS_DESK_FORMAT = "news_desk:(%s)";
+
+    private String sortSetting = null;
+    private List<String> newsDeskParams = new ArrayList<>();
+    private Date beginDateParam = null;
+
+    private String searchTerm = null;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +77,14 @@ public class SearchActivity extends AppCompatActivity {
         etQuery = (EditText) findViewById(R.id.etQuery);
         btnSearch = (Button) findViewById(R.id.btnSearch);
         gvResults = (GridView) findViewById(R.id.gvResults);
+        gvResults.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                loadArticles(page);
+                return true;
+            }
+        });
+
         articles = new ArrayList<Article>();
         articleAdapter = new ArticleArrayAdapter(this, articles);
         gvResults.setAdapter(articleAdapter);
@@ -83,22 +113,33 @@ public class SearchActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    private RequestParams setUpQueryParams(int page) {
+        RequestParams params = new RequestParams();
+        params.put("api-key", API_KEY);
+        params.put("page", page);
+        params.put("q", searchTerm);
+        return params;
     }
 
     public void onArticleSearch(View view) {
         String query = etQuery.getText().toString();
+        if (searchTerm == null || query != searchTerm) {
+            searchTerm = query;
+            articleAdapter.clear();
+        }
+        loadArticles(0);
+    }
+
+    public void loadArticles(int page) {
         AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams params = new RequestParams();
-        params.put("api-key", API_KEY);
-        params.put("page", 0);
-        params.put("q", query);
+        RequestParams params = setUpQueryParams(page);
 
         client.get(URL, params, new JsonHttpResponseHandler(){
             @Override

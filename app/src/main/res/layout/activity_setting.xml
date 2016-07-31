@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <TableLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TableRow
+        android:id="@+id/trBeginDateRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvBeginDate"
+            android:text="@string/begin_date"
+            android:padding="10dp"
+            />
+        <TextView
+            android:id="@+id/tvItemDueDate"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            />
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/trSortOrder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvSortOrder"
+            android:text="@string/sort_order"
+            android:padding="10dp"
+            />
+
+    </TableRow>
+
+</TableLayout>
+
