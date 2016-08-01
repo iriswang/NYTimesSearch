@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+
+    <TableRow
+        android:id="@+id/trBeginDateRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvBeginDate"
+            android:text="@string/begin_date"
+            android:padding="10dp"
+            />
+        <TextView
+            android:id="@+id/tvItemDueDate"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:onClick="showDatePickerDialog"
+            />
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/trSortOrder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvSortOrder"
+            android:text="@string/sort_order"
+            android:padding="10dp"
+            />
+        <Spinner
+            android:layout_height="wrap_content"
+            android:id="@+id/sortOrderSpinner"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:spinnerMode="dropdown"/>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/trNewsDesk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvNewsDesk"
+            android:text="News Desk Values"
+            android:padding="10dp"
+            />
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:orientation="vertical"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+            <CheckBox android:id="@+id/checkbox_arts"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="Arts" />
+            <CheckBox android:id="@+id/checkbox_opinion"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="Opinion" />
+            <CheckBox android:id="@+id/checkbox_world"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="World" />
+        </LinearLayout>
+
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:id="@+id/button"
+            android:onClick="saveSettings"
+            android:layout_column="1"/>
+    </TableRow>
+
+</TableLayout>
+
