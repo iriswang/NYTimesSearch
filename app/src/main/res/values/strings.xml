@@ -6,4 +6,8 @@
     <string name="title_activity_article">ArticleActivity</string>
     <string name="begin_date">Begin Date</string>
     <string name="sort_order">Sort Order</string>
+    <string name="news_desk_values">News Desk Values</string>
+    <string name="arts">Arts</string>
+    <string name="opinion">Opinion</string>
+    <string name="world">World</string>
 </resources>

@@ -16,6 +16,7 @@ import com.iris.nytimessearch.listeners.EndlessScrollListener;
 import com.iris.nytimessearch.models.Article;
 import com.iris.nytimessearch.adapters.ArticleArrayAdapter;
 import com.iris.nytimessearch.R;
+import com.iris.nytimessearch.utils.SearchConstants;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -50,30 +51,13 @@ public class SearchActivity extends AppCompatActivity {
     private final String API_KEY = "51ba1c50281b474d82ab5c30973ddb60";
     private final String URL = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
 
-    // Constants for sort order
-    public static final String QUERY_PARAM_SORT = "sort";
-    public static final String SORT_ORDER_OLDEST = "oldest";
-    public static final String SORT_ORDER_NEWEST = "newest";
-    public static final List<String> SORT_ORDERS = asList(SORT_ORDER_NEWEST, SORT_ORDER_OLDEST);
-
     // Query Params
-    public static final String QUERY_PARAM_BEGIN_DATE = "begin_date";
-
-    //Query Params
-    public  static final String NEWS_DESK_ARG = "fq";
-    private static final String NEWS_DESK_FORMAT = "news_desk:(%s)";
-    public static final String NEWS_DESK_ART = "Arts";
-    public static final String NEWS_DESK_OPINION = "Opinion";
-    public static final String NEWS_DESK_WORLD = "World";
     private List<String> newsDeskParams = asList();
-
-    private String sortSetting = SORT_ORDER_NEWEST;
+    private String sortSetting = SearchConstants.SORT_ORDER_NEWEST;
     private Calendar beginDateParam = null;
-
     private String searchTerm = null;
 
     public static final int SAVE_REQUEST_CODE = 20;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,19 +104,15 @@ public class SearchActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_filter) {
             Intent i = new Intent(getApplicationContext(), FilterActivity.class);
-            i.putExtra(SearchActivity.QUERY_PARAM_SORT, sortSetting);
-            i.putExtra(SearchActivity.QUERY_PARAM_BEGIN_DATE, beginDateParam);
-            i.putExtra(SearchActivity.NEWS_DESK_ARG, (Serializable) newsDeskParams);
+            i.putExtra(SearchConstants.QUERY_PARAM_SORT_ORDER, sortSetting);
+            i.putExtra(SearchConstants.QUERY_PARAM_BEGIN_DATE, beginDateParam);
+            i.putExtra(SearchConstants.QUERY_PARAM_NEWS_DESK_ARG, (Serializable) newsDeskParams);
             startActivityForResult(i, SAVE_REQUEST_CODE);
            return true;
         }
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -148,9 +128,9 @@ public class SearchActivity extends AppCompatActivity {
 
     private void handleSaveSettingResult(Intent data, int resultCode) {
         if (resultCode == RESULT_OK) {
-            sortSetting = data.getStringExtra(QUERY_PARAM_SORT);
-            beginDateParam = (Calendar) data.getSerializableExtra(QUERY_PARAM_BEGIN_DATE);
-            newsDeskParams = (List<String>) data.getSerializableExtra(NEWS_DESK_ARG);
+            sortSetting = data.getStringExtra(SearchConstants.QUERY_PARAM_SORT_ORDER);
+            beginDateParam = (Calendar) data.getSerializableExtra(SearchConstants.QUERY_PARAM_BEGIN_DATE);
+            newsDeskParams = (List<String>) data.getSerializableExtra(SearchConstants.QUERY_PARAM_NEWS_DESK_ARG);
             if (searchTerm != null) {
                 articleAdapter.clear();
                 loadArticles(0);
@@ -168,10 +148,10 @@ public class SearchActivity extends AppCompatActivity {
             SimpleDateFormat beginDateFormat = new SimpleDateFormat("yyyyMMdd");
             Date date = beginDateParam.getTime();
             String beginDateStr = beginDateFormat.format(date);
-            params.put(QUERY_PARAM_BEGIN_DATE, beginDateStr);
+            params.put(SearchConstants.QUERY_PARAM_BEGIN_DATE, beginDateStr);
         }
         if (! newsDeskParams.isEmpty()) {
-            params.put(NEWS_DESK_ARG, convertToLucene(newsDeskParams));
+            params.put(SearchConstants.QUERY_PARAM_NEWS_DESK_ARG, convertToLucene(newsDeskParams));
         }
         return params;
     }
@@ -182,7 +162,7 @@ public class SearchActivity extends AppCompatActivity {
             newsDeskStr += delimiter + "\"" + newsDeskVal + "\"";
             delimiter = " ";
         }
-        return String.format(NEWS_DESK_FORMAT, newsDeskStr);
+        return String.format(SearchConstants.QUERY_PARAM_NEWS_DESK_ARG, newsDeskStr);
     }
 
     public void onArticleSearch(View view) {
@@ -206,7 +186,6 @@ public class SearchActivity extends AppCompatActivity {
                         response.getJSONObject("response").getJSONArray("docs");
                     articleAdapter.addAll(Article.fromJsonArray(articleJsonResults));
                 } catch (JSONException e) {
-
                 }
             }
         });
