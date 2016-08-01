@@ -133,6 +133,13 @@ public class SearchActivity extends AppCompatActivity {
             newsDeskParams = (List<String>) data.getSerializableExtra(SearchConstants.QUERY_PARAM_NEWS_DESK_ARG);
             if (searchTerm != null) {
                 articleAdapter.clear();
+                gvResults.setOnScrollListener(new EndlessScrollListener() {
+                    @Override
+                    public boolean onLoadMore(int page, int totalItemsCount) {
+                        loadArticles(page);
+                        return true;
+                    }
+                });
                 loadArticles(0);
             }
         }
@@ -162,7 +169,7 @@ public class SearchActivity extends AppCompatActivity {
             newsDeskStr += delimiter + "\"" + newsDeskVal + "\"";
             delimiter = " ";
         }
-        return String.format(SearchConstants.QUERY_PARAM_NEWS_DESK_ARG, newsDeskStr);
+        return String.format(SearchConstants.NEWS_DESK_FORMAT, newsDeskStr);
     }
 
     public void onArticleSearch(View view) {
